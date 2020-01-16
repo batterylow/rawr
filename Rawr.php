@@ -28,7 +28,7 @@ class Rawr {
         && $this->exiftool ? file_exists($this->exiftool) && is_executable($this->exiftool) : true;
     }
 
-    public function extractPreview($raw, $previewDir, $previewNumber = null, $overwrite = false) {
+    public function extractPreview($raw, $previewDir, $previewFileName = null, $previewNumber = null, $overwrite = false) {
 
         if (!$this->isReady()) {
             throw new \RuntimeException('Not ready to extract previews');
@@ -59,7 +59,10 @@ class Rawr {
 
         // build the full filename
         $rawFilename = pathinfo($raw, PATHINFO_FILENAME);
-        $previewName = $rawFilename. '.' . $outputExtension;
+        if(!$previewFileName){
+            $previewFileName = $rawFilename;
+        }
+        $previewName = $previewFileName. '.' . $outputExtension;
         $previewPath = $previewDir . DIRECTORY_SEPARATOR . $previewName;
         $outputFile = $this->sandbox . DIRECTORY_SEPARATOR . $rawFilename.'-preview'.$previewNumber. '.' . $outputExtension;
 
